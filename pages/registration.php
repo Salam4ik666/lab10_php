@@ -1,55 +1,92 @@
-<?php
-session_start();
-
-// Подключение к базе данных
-include_once('../scripts/db.php');
-
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['event_id'])) {
-    $eventId = $_POST['event_id'];
-
-    // Проверяем, авторизован ли пользователь
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: /login.php");
-        exit();
-    }
-
-    // Получаем имя пользователя из сессии
-    $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
-
-    // Возвращаем пользователя на страницу события
-    header("Location: /pages/events.php");
-
-    // Записываем информацию о регистрации в базу данных
-    $userId = $_SESSION['user_id'];
-    $sql = "INSERT INTO registrations (event_id, user_id) VALUES (?, ?)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$eventId, $userId]);
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Регистрация на мероприятие</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
-    <?php include_once('../includes/header.php'); ?>
+    <header>
+        <h1>Спортивные мероприятия</h1>
+    </header>
     <div class="container">
-        <h2>Регистрация на мероприятие</h2>
-        <form action="registration.php" method="post">
+        <h2>Регистрация</h2>
+        <form action="/actions/register.php" method="post">
             <label for="name">Имя:</label>
-            <input type="text" id="name" name="name" value="<?php echo $userName; ?>" readonly><br><br>
+            <input type="text" id="name" name="name" required><br><br>
+            <label for="surname">Фамилия:</label>
+            <input type="text" id="surname" name="surname" required><br><br>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required><br><br>
-            <input type="hidden" name="event_id" value="<?php echo $_POST['event_id']; ?>">
-            <button type="submit">Записаться на мероприятие</button>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <button type="submit">Зарегистрироваться</button>
         </form>
     </div>
-    <?php include_once('../includes/footer.php'); ?>
 </body>
 
 </html>

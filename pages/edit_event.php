@@ -93,7 +93,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body>
-    <?php include_once('../includes/header.php'); ?>
     <div class="container">
         <h2>Добавить новое мероприятие</h2>
         <form action="add_event.php" method="post">
@@ -108,7 +107,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <button type="submit">Добавить мероприятие</button>
         </form>
     </div>
-    <?php include_once('../includes/footer.php'); ?>
 </body>
 
 </html>
